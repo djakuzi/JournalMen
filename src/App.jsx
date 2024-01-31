@@ -1,15 +1,13 @@
 import './App.css'
-import Button from './components/Button/Button'
-import JournalItem from './components/JournalItem/JournalItem'
-import CardButton from './components/CardButton/CardButton'
 import LeftPanel from './layouts/LeftPanel/LeftPanel'
 import Body from './layouts/Body/Body'
 import Header from './components/Header/Header'
 import JournalList from './components/JournalList/JournalList'
 import JournalAddButton from './components/JournalAddButton/JournalAddButton'
-// import { useEffect, useState } from 'react'
 import JournalForm from './components/JournalForm/JournalForm'
 import { useLocalStorage } from './hooks/use-localstorage.hook'
+import { UserContext, UserContextProvider } from './context/user.context'
+import { useState } from 'react'
 
 function mapItems(items){
 
@@ -21,19 +19,16 @@ function mapItems(items){
       ...i,
       date: new Date(i.date)
     }))
-}
+  }
 
 export default  function App() {
 
-  const [items, setItems] = useLocalStorage('data') 
+  const [items, setItems] = useLocalStorage('data')
+ 
 
-  console.log(items)
-  
   const addItem = function(item){
-    console.log(item, items)
     setItems([...mapItems(items), {
-      text: item.text,
-      title: item.title,
+      ...item,
       date: new Date(item.date), 
       id: Math.max( ...items.map( i => i.id), 0) + 1,
     }])
@@ -41,26 +36,25 @@ export default  function App() {
   }
   
   return (
-    <div className='app'>
+    <UserContextProvider>
+      <div className='app'>
 
-    <LeftPanel>
-      <Header/>
+      <LeftPanel>
+        <Header/>
 
-      <JournalAddButton />
-      <JournalList items = {mapItems(items)}>
+        <JournalAddButton />
+        <JournalList items = {mapItems(items)}>
 
-      </JournalList>
+        </JournalList>
 
-    </LeftPanel>
+      </LeftPanel>
 
-    <Body>
-      <JournalForm onSubmit={addItem} />
-    </Body>
+      <Body>
+        <JournalForm onSubmit={addItem} />
+      </Body>
 
-   
-      
-
-    </div>
+      </div>
+    </UserContextProvider>
   )
 }
 
