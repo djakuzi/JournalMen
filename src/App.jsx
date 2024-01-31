@@ -7,49 +7,38 @@ import Body from './layouts/Body/Body'
 import Header from './components/Header/Header'
 import JournalList from './components/JournalList/JournalList'
 import JournalAddButton from './components/JournalAddButton/JournalAddButton'
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 import JournalForm from './components/JournalForm/JournalForm'
+import { useLocalStorage } from './hooks/use-localstorage.hook'
 
+function mapItems(items){
 
+  if (!items){
+    return []
+  }
+
+  return items.map(i =>({
+      ...i,
+      date: new Date(i.date)
+    }))
+}
 
 export default  function App() {
-  const [items, setItems] = useState([]) 
 
-  useEffect( () => {
+  const [items, setItems] = useLocalStorage('data') 
 
-    const data = JSON.parse(localStorage.getItem('data'))
-
-    if(data){
-      setItems(data.map( item => ({
-        ...item,
-        date: new Date(item.date)
-      })))
-    }
-
-  }, [])
-
-  useEffect( () => {
-    if (items.length){
-      console.log('read')
-      localStorage.setItem('data', JSON.stringify(items))
-    }
-    
-  }, [items])
-
+  console.log(items)
   
-
   const addItem = function(item){
-    
-    setItems([...items, {
+    console.log(item, items)
+    setItems([...mapItems(items), {
       text: item.text,
       title: item.title,
-      date: new Date(item.date),
-      id: Math.max(...items.map( i => i.id),0) + 1,
+      date: new Date(item.date), 
+      id: Math.max( ...items.map( i => i.id), 0) + 1,
     }])
     
   }
-
- 
   
   return (
     <div className='app'>
@@ -58,7 +47,7 @@ export default  function App() {
       <Header/>
 
       <JournalAddButton />
-      <JournalList items = {items}>
+      <JournalList items = {mapItems(items)}>
 
       </JournalList>
 

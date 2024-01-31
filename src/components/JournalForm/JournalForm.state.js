@@ -5,10 +5,10 @@ export const INITIAL_STATE = {
         date: true
     },
     values: {
-        text: '',
-        title: '',
-        date: '',
-        tag: ''
+        text: '2',
+        title: '2',
+        date: new Date(),
+        tag: '2'
 
     },
     isFormReadyToSubmit: false
