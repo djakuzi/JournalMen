@@ -1,0 +1,27 @@
+.input {
+    width: 100%;
+    border: none;
+    background: none;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-family: 'Source Sans 3', sans-serif;
+    color: aliceblue;
+    border-bottom: 1px solid #565252;
+
+}
+
+.input-title {
+    font-size: 32px;
+    color: aliceblue;
+   
+}
+
+
+.invalid {
+    /* border: 1px solid rgba(166, 45, 45, 0.798); */
+    background-color: rgba(92, 71, 70, 0.732);
+    /* background: rgb(58, 41, 41); */
+}
+

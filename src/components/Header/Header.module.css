@@ -1,0 +1,20 @@
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+.logo{
+    width: 280px;
+    border: 1px solid;
+    --angle: 0deg;
+    border-image: linear-gradient(var(--angle), #181818, #181818,yellow) 1;
+    animation: 8s rotate linear infinite;
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+    
