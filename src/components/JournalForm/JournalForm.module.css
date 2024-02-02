@@ -1,4 +1,5 @@
 
+
 .journal-form{
     display: flex;
     flex-direction: column;
@@ -8,14 +9,15 @@
 
 
 .form-label{
-    width: 10%;
+    width: 50px;
     display: flex;
     align-items: center;
     gap: 15%;
 }
 
 .form-label img{
-    width: 40%;
+    display: block;
+    width: 40px;
 }
 
 .form-row{
@@ -35,7 +37,6 @@
     font-family: 'Source Sans 3', sans-serif;
     color: aliceblue;
     border-bottom: 1px solid #565252;
-    
 }
 
 /* test length red border */
@@ -49,3 +50,29 @@
 input, textarea {
     transition: background-color 1.5s ease;
 }
+
+.delete{
+    width: 55px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    
+}
+
+.delete img {
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease-in-out;
+    padding: 0%;
+}
+
+.delete img:hover{
+    translate: 0 -20%;
+    background-color: rgba(214, 216, 218, 0.186);
+}
+
+.flexInputButton{
+    display: flex;
+    
+}
+

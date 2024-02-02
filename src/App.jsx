@@ -24,17 +24,27 @@ function mapItems(items){
 export default  function App() {
 
   const [items, setItems] = useLocalStorage('data')
- 
+  const [selectedItem, setSelectedItem] = useState({})
 
   const addItem = function(item){
-    setItems([...mapItems(items), {
-      ...item,
-      date: new Date(item.date), 
-      id: Math.max( ...items.map( i => i.id), 0) + 1,
-    }])
+    if(!item.id){
+      setItems([...mapItems(items), {
+        ...item,
+        date: new Date(item.date), 
+        id: Math.max( ...items.map( i => i.id), 0) + 1,
+      }])
+    } else {
+      setItems( [...mapItems(items).map( el =>{
+        return (el.id == item.id) ? {...item, date: new Date(item.date)} : el 
+      })])
+    }
     
   }
-  
+  const deleteItem = (id) => {
+    setItems(items.filter( el => el.id !== id))
+    setSelectedItem({})
+  }
+
   return (
     <UserContextProvider>
       <div className='app'>
@@ -42,33 +52,18 @@ export default  function App() {
       <LeftPanel>
         <Header/>
 
-        <JournalAddButton />
-        <JournalList items = {mapItems(items)}>
+        <JournalAddButton clearForm={() => setSelectedItem({})}/>
+        <JournalList items = {mapItems(items)} setItem={setSelectedItem}>
 
         </JournalList>
 
       </LeftPanel>
 
       <Body>
-        <JournalForm onSubmit={addItem} />
+        <JournalForm onSubmit={addItem} onDelete={deleteItem} selectedItem ={selectedItem} />
       </Body>
 
       </div>
     </UserContextProvider>
   )
 }
-
-// [{
-//       "id": 1,
-//       "title": "Подготовка к обновлению курсов",
-//       "text": "Горные походы открывают удивительные природные ландшафт",
-//       "date": "2024/03/03"
-//     },
-
-//     {
-//       "id": 2,
-//       "title": "Поход в годы",
-//       "text": "Думал, что очень много времени",
-//       "date": "2023/03/03"
-//     }
-//   ]

@@ -4,12 +4,11 @@ import JournalItem from '../JournalItem/JournalItem';
 import { useContext } from 'react';
 import { UserContext } from '../../context/user.context';
 
-export default  function JournalList({items}) {
+export default  function JournalList({items, setItem}) {
 
   const {userId} = useContext(UserContext)
 
   if (items.length === 0){
-
     return <div className='journal-list'>
       <p>Записей нет</p>
     </div>
@@ -26,7 +25,7 @@ export default  function JournalList({items}) {
   return (
     <div className='journal-list'>
       {items.filter( el => (userId === el.userId)).sort(sortItems).map( el => (
-          <CardButton key={el.id}>
+          <CardButton key={el.id} onClick={() => setItem(el)}>
             <JournalItem data = {el}/>
           </CardButton>
         ))}

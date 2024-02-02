@@ -6,7 +6,7 @@ import { formReducer, INITIAL_STATE } from './JournalForm.state';
 import Input from '../Input/Input';
 import { UserContext } from '../../context/user.context';
 
-export default  function JournalForm({onSubmit}) {
+export default  function JournalForm({onSubmit, selectedItem, onDelete}) {
 
   const [formState, dispatchForm] = useReducer(formReducer, INITIAL_STATE)
   const {isValid, isFormReadyToSubmit, values} = formState 
@@ -29,6 +29,15 @@ export default  function JournalForm({onSubmit}) {
       break
     }
   }
+
+  useEffect( ()=>{
+    if(selectedItem){
+      dispatchForm({type: 'CLEAR'})
+      dispatchForm({type: 'SET_VALUE', payload: {userId}})
+    }
+
+    dispatchForm({type: 'SET_VALUE', payload: {...selectedItem}})
+  },[selectedItem])
   
   useEffect( () =>{
 
@@ -51,8 +60,9 @@ export default  function JournalForm({onSubmit}) {
     if(isFormReadyToSubmit){
       onSubmit(values)
       dispatchForm({type: 'CLEAR'})
+      dispatchForm({type: 'SET_VALUE', payload: {userId}})
     }
-  }, [isFormReadyToSubmit])
+  }, [isFormReadyToSubmit, values, onSubmit,selectedItem])
 
   useEffect( () => {
     dispatchForm({type: 'SET_VALUE', payload: {userId}})
@@ -68,11 +78,19 @@ export default  function JournalForm({onSubmit}) {
     dispatchForm({type: 'SUBMIT'})
   }
 
+  const onDeleteItem = (id) => {
+    onDelete(id)
+    dispatchForm({type: 'CLEAR'})
+    dispatchForm({type: 'SET_VALUE', payload: {userId}})
+  }
+
   return (
         <form className={styles['journal-form']} onSubmit={addJournalItem}>
-          {userId}
-          <div>
+          <div className={styles['flexInputButton']}>
             <Input type='text' isValid = {isValid.title}  onChange={onChange} ref={titleRef} value={values.title} name='title' appearence='title' placeholder='Заголовок' />
+            {selectedItem.id && <button className={styles['delete']} type='button' onClick={ () => onDeleteItem(selectedItem.id)}>
+              <img src='./img/archive.png' alt='кнопка удалить'></img>
+            </button>}
           </div>
 
           <div className={styles['form-row']}>
@@ -82,7 +100,7 @@ export default  function JournalForm({onSubmit}) {
               <span>Дата</span>
             </label>
 
-            <Input type='date' isValid = {isValid.date} onChange={onChange} ref={dateRef} value={values.date} name='date' id='date' appearence='date'/>
+            <Input type='date' isValid = {isValid.date} onChange={onChange} ref={dateRef} value={values.date ? new Date(values.date).toISOString().slice(0,10) : ''} name='date' id='date' appearence='date'/>
 
           </div>
 
